@@ -18,9 +18,9 @@
     <body>
         <div>
             <h1 id="title">Blueprints</h1>
-            <label for="author">Author</label>
-            <input type="search" id="author">
-            <button type="button" id="getBlueprints">Get blueprints</button>
+            <label id="author">Author</label>
+            <input type="text" id="name" name="name" />
+            <button type="button" id="getButton" onclick="app.getBlueprintsByAuthor(document.getElementById('name').value)">Get Blueprints</button>
         </div>
         <div>
             <div>
@@ -30,17 +30,17 @@
                         <tr>
                             <th>Blueprint name</th>
                             <th>Number of points</th>
-                            <th>Open</th>
+                            <th>
+                                <button type="button">Open</button>
+                            </th>
                         </tr>
                     </thead>
-                    <tbody>
-
-                    </tbody>
+                    <tbody></tbody>
                 </table>
-                <p>Total user points:<span id="userPoints">0</span></p>
+                <p>Total user points: <span id="userPoints">0</span></p>
             </div>
             <div>
-                <h2>Current Blueprint:<span id="selectedBlueprint">None</span></h2>
+                <h2>Current Blueprint: <span id="selectedBlueprint">None</span></h2>
                 <div id="blueprintImage"></div>
             </div>
             
