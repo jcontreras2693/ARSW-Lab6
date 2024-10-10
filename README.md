@@ -124,13 +124,10 @@ El objetivo de este ejercicio es diseñar un cliente web básico utilizando los 
 
 14. Revise la [documentación y ejemplos de los estilos de Bootstrap](https://v4-alpha.getbootstrap.com/examples/) (ya incluidos en el ejercicio), agregue los elementos necesarios a la página para que sea más vistosa, y más cercana al mock dado al inicio del enunciado.
 
+***
 -[Parte 2](https://github.com/ARSW-ECI-archive/HTML5-JS_REST_CLIENT_Blueprints-2)
 
-#### Escuela Colombiana de Ingeniería
-#### Procesos de desarrollo de software - PDSW
-#### Construción de un cliente 'grueso' con un API REST, HTML5, Javascript y CSS3. Parte II.
-
-
+## Construción de un cliente 'grueso' con un API REST, HTML5, Javascript y CSS3. Parte II.
 
 ![](img/mock3.png)
 
