@@ -1,20 +1,33 @@
-apiclient=(function() {
-    var getBlueprintsByAuthor = function(authname,callback){
-        $.get("http://localhost:8080/blueprints/"+authname,
-            function(data) {
-                callback(JSON.parse(JSON.stringify(data, null, 2)));
-            });
+/*
+await se utiliza para esperar a que la promesa devuelta por fetch
+se resuelva, es decir, esperar a que los datos lleguen del servidor.
+*/
+
+const apiClient = (() => {
+    const url = "http://localhost:8080/blueprints/";
+
+    const getBlueprintsByAuthor = async (authName, callback) => {
+        try {
+            const response = await fetch(`${url}${authName}`);
+            const data = await response.json();
+            callback(data);
+        } catch (error) {
+            console.error('Error searching for blueprints by author:', error);
+        }
     };
 
-    var getBlueprintsByNameAndAuthor = function(authname,bpname,callback){
-        $.get("http://localhost:8080/blueprints/"+authname+"/"+bpname,
-            function(data) {
-                callback(JSON.parse(JSON.stringify(data, null, 2)));
-            });
+    const getBlueprintsByNameAndAuthor = async (authName, bpName, callback) => {
+        try {
+            const response = await fetch(`${url}${authName}/${bpName}`);
+            const data = await response.json();
+            callback(data);
+        } catch (error) {
+            console.error('Error searching for blueprints by author and name:', error);
+        }
     };
 
     return {
-            getBlueprintsByAuthor: getBlueprintsByAuthor,
-            getBlueprintsByNameAndAuthor: getBlueprintsByNameAndAuthor
+        getBlueprintsByAuthor,
+        getBlueprintsByNameAndAuthor
     };
 })();
