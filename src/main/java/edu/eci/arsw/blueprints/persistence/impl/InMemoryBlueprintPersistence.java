@@ -88,5 +88,10 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
         synchronized(bpToUpdate){
             bpToUpdate.setPoints(points);  
         }     
-    }  
+    }
+
+    @Override
+    public void deleteBlueprint(String author, String bpname){
+        blueprints.remove(new Tuple<>(author, bpname));
+    }
 } 

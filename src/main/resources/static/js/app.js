@@ -1,64 +1,76 @@
 const app = (() => {
-    let author = "";
-    let blueprints = [];
-    const api = apiClient;
+    var author = "";
+    var bpname = "";
+    var blueprints = [];
+    var api = apiClient;
+    var points = [];
 
     const setAuthor = (newAuthor) => {
         author = newAuthor;
-        $('#selectedAuthor').text(`${author}'s Blueprints`);
+        bpname = "";
+        $('#selectedAuthor').text(author + "'s Blueprints");
     };
 
     const getBlueprintsByAuthor = async (author) => {
-        $('#blueprintsTable tbody').empty();
+        setAuthor(author);
         try {
-            await api.getBlueprintsByAuthor(author, (authorsBlueprints) => {
-                blueprints = authorsBlueprints.map(bp => ({
-                    name: bp.name,
-                    numberOfPoints: bp.points.length
-                }));
-
-                blueprints.forEach(bp => {
-                    const markup = `
-                        <tr>
-                            <td>${bp.name}</td>
-                            <td>${bp.numberOfPoints}</td>
-                            <td>
-                                <button type="button" onclick="app.getBlueprintsByNameAndAuthor('${author}', '${bp.name}')">
-                                    Open
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    $("#blueprintsTable tbody").append(markup);
-                });
-
-                const totalPoints = blueprints.reduce((acc, bp) => acc + bp.numberOfPoints, 0);
-                $('#userPoints').text(totalPoints);
-            });
-
+            await api.getBlueprintsByAuthor(author, openBlueprint);
             clearCanvas();
         } catch (error) {
             console.error('Error fetching blueprints by author:', error);
         }
     };
 
+    const openBlueprint = (authorsBlueprints) => {
+        $('#blueprintsTable tbody').empty();
+        blueprints = authorsBlueprints.map(bp => ({
+            name: bp.name,
+            numberOfPoints: bp.points.length
+        }));
+
+        blueprints.forEach(bp => {
+            const markup = `
+                <tr>
+                    <td>${bp.name}</td>
+                    <td>${bp.numberOfPoints}</td>
+                    <td>
+                        <button type="button" onclick="app.getBlueprintsByNameAndAuthor('${author}', '${bp.name}')">
+                            Open
+                        </button>
+                    </td>
+                </tr>
+            `;
+            $("#blueprintsTable tbody").append(markup);
+        });
+
+        const totalPoints = blueprints.reduce((acc, bp) => acc + bp.numberOfPoints, 0);
+        $('#userPoints').text(totalPoints);
+    };
+
     const getBlueprintsByNameAndAuthor = async (author, name) => {
         try {
-            await api.getBlueprintsByNameAndAuthor(author, name, (blueprint) => {
-                const c = document.getElementById('myCanvas');
-                const ctx = c.getContext('2d');
-                
-                clearCanvas();
-
-                ctx.moveTo(blueprint.points[0].x, blueprint.points[0].y);
-                blueprint.points.forEach(point => ctx.lineTo(point.x, point.y));
-
-                ctx.stroke();
-                $('#selectedBlueprint').text(name);
-            });
+            await api.getBlueprintsByNameAndAuthor(author, name, drawBlueprints);
         } catch (error) {
             console.error('Error fetching blueprint by name and author:', error);
         }
+    };
+
+    const drawBlueprints = (blueprint) =>{
+        bpname = blueprint.name;
+        points = blueprint.points;
+        if(points.length != 0){
+            const c = document.getElementById('myCanvas');
+            const ctx = c.getContext('2d');
+
+            clearCanvas();
+            ctx.moveTo(blueprint.points[0].x, blueprint.points[0].y);
+            for (var i = 1 ; i < blueprint.points.length ; i++){
+                ctx.lineTo(blueprint.points[i].x, blueprint.points[i].y);
+                ctx.moveTo(blueprint.points[i].x, blueprint.points[i].y);
+            }
+            ctx.stroke();
+        }
+        $('#selectedBlueprint').text(name);
     };
 
     const clearCanvas = () => {
@@ -68,9 +80,59 @@ const app = (() => {
         ctx.beginPath();
     };
 
+    const initCanvas = () => {
+        const c = document.getElementById("myCanvas");
+        const ctx = c.getContext("2d");
+        if(window.PointerEvent) {
+            scratchBlueprint("pointerdown", c, ctx);
+        }
+        else {
+            scratchBlueprint("mousedown", c, ctx);
+        }
+    };
+
+    const scratchBlueprint = (pointerType, c, ctx) => {
+        c.addEventListener(pointerType, function(event){
+            if(bpname != ""){
+                const rect = c.getBoundingClientRect();
+                var posX = event.pageX - Math.floor(rect.left);
+                var posY = event.pageY - Math.floor(rect.top);
+                points.push({"x": posX, "y": posY});
+                ctx.lineTo(posX, posY);
+                ctx.moveTo(posX, posY);
+                ctx.stroke();
+            }
+        });
+    };
+
+    const saveBlueprint = () => {
+        var promise = api.updateBlueprint(author, bpname, points);
+        promise.then(() => api.getBlueprintsByAuthor(author, openBlueprint))
+               .then(() => api.getBlueprintsByNameAndAuthor(author, bpname, drawBlueprints));
+   };
+
+    const createBlueprint = () => {
+        clearCanvas();
+        bpname = $('#bpname').val();
+        points = [];
+        var promise = api.createBlueprint(author, bpname, points);
+        promise.then(() => api.getBlueprintsByAuthor(author, openBlueprint))
+               .then(() => api.getBlueprintsByNameAndAuthor(author, bpname, drawBlueprints));
+    };
+
+    const deleteBlueprint = () => {
+        clearCanvas();
+        var promise = api.deleteBlueprint(author, bpname);
+        promise.then(() => api.getBlueprintsByAuthor(author, openBlueprint))
+    };
+
     return {
         setAuthor,
         getBlueprintsByAuthor,
-        getBlueprintsByNameAndAuthor
+        getBlueprintsByNameAndAuthor,
+        initCanvas,
+        saveBlueprint,
+        createBlueprint,
+        deleteBlueprint
     };
 })();

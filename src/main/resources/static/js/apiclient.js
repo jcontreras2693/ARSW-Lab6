@@ -12,7 +12,7 @@ const apiClient = (() => {
             const data = await response.json();
             callback(data);
         } catch (error) {
-            console.error('Error searching for blueprints by author:', error);
+            location.reload();
         }
     };
 
@@ -26,8 +26,40 @@ const apiClient = (() => {
         }
     };
 
+    const updateBlueprint = async (authName, bpName, points) => {
+        var promise = $.ajax({
+            url: 'http://localhost:8080/blueprints/' + authName + "/" + bpName,
+            type: 'PUT',
+            data: JSON.stringify(points),
+            contentType: "application/json"
+        })
+        return promise;
+    };
+
+    const createBlueprint = async (authName, bpName, points) => {
+        var json = JSON.stringify({author: authName, points: points, name: bpName});
+        var promise = $.ajax({
+            url: 'http://localhost:8080/blueprints',
+            type: 'POST',
+            data: json,
+            contentType: "application/json"
+        })
+        return promise;
+    };
+
+    const deleteBlueprint = async (authName, bpName) => {
+            var promise = $.ajax({
+                url: 'http://localhost:8080/blueprints/' + authName + "/" + bpName,
+                type: 'DELETE'
+            })
+            return promise;
+        };
+
     return {
         getBlueprintsByAuthor,
-        getBlueprintsByNameAndAuthor
+        getBlueprintsByNameAndAuthor,
+        updateBlueprint,
+        createBlueprint,
+        deleteBlueprint
     };
 })();

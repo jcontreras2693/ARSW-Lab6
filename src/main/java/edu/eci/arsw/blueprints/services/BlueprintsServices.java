@@ -64,7 +64,7 @@ public class BlueprintsServices {
      * Updates the blueprint's points.
      * @param author
      * @param name
-     * @param newPoints
+     * @param points
      * @throws BlueprintNotFoundException
      */
     public void updateBlueprint(String author,String name, List<Point> points)throws BlueprintNotFoundException{
@@ -84,6 +84,10 @@ public class BlueprintsServices {
             blueprintsFiltered.add(bp);
         }
         return blueprintsFiltered;
+    }
+
+    public void deleteBlueprint(String author,String name){
+        bpp.deleteBlueprint(author, name);
     }
 
 }

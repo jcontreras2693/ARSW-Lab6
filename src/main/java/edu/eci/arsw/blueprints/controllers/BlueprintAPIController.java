@@ -106,4 +106,13 @@ public class BlueprintAPIController {
         }
     }
 
+    /**
+     * Actualiza los puntos del plano indicado.
+     * @param author
+     * @param bpname
+     */
+    @RequestMapping(value = "/{author}/{blueprint}", method = RequestMethod.DELETE)
+    public void manejadorDeleteRecursoXX(@PathVariable("author") String author, @PathVariable("blueprint") String bpname) {
+        blueprintsServices.deleteBlueprint(author, bpname);
+    }
 }
