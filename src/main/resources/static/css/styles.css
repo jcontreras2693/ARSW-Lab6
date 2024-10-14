@@ -1,31 +1,12 @@
-/* General */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 20px;
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-.container {
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Cabecera */
-h1 {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #495057;
-    text-align: left;  /* Alinea el título principal a la izquierda */
-    margin-bottom: 20px;
-}
-
-/* Formulario */
 .form-group {
     display: flex;
-    justify-content: flex-start; /* Alinea el contenido a la izquierda */
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 20px;
 }
@@ -37,11 +18,26 @@ h1 {
 }
 
 .form-control {
-    width: auto;  /* Ajusta el ancho del input */
+    width: auto;
     border-radius: 8px;
     border: 1px solid #ced4da;
     padding: 10px;
-    margin-right: 10px; /* Espacio entre el input y el botón */
+    margin-right: 10px;
+}
+
+.author-group, .blueprint-group {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.blueprint-group {
+    margin-right: 0;
+}
+
+canvas {
+    border: 2px solid black;
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
 button {
@@ -50,54 +46,24 @@ button {
     border-radius: 5px;
 }
 
-/* Botones de acción */
 #saveButton {
     background-color: #28a745;
     color: white;
+    margin-right: 50px;
 }
 
 #deleteButton {
-    background-color: #f52cf5;  /* Este es el color que mencionaste */
+    background-color: #f52cf5;
     color: white;
+    margin-left: 50px;
 }
 
 #createButton {
-    background-color: #dc3545;  /* Mantiene el color rojo */
+    background-color: #dc3545;
     color: white;
 }
 
-/* Tabla */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-th, td {
-    padding: 12px;
-    border: 1px solid #495057;
-    text-align: center;
-}
-
-thead th {
-    background-color: #c0ddfa;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f8f9fa;
-}
-
-/* Canvas */
-canvas {
-    display: block;
-    margin: 0 auto;
-    border: 2px solid black;
-    border-radius: 8px;
-    margin-top: 20px;
-}
-
-/* Contenedor de botones al final */
 .button-container {
-    text-align: center;
+    text-align: left;
     margin-top: 20px;
 }

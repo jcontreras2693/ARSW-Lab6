@@ -70,7 +70,7 @@ const app = (() => {
             }
             ctx.stroke();
         }
-        $('#selectedBlueprint').text(name);
+        $('#selectedBlueprint').text(bpname);
     };
 
     const clearCanvas = () => {
@@ -93,14 +93,16 @@ const app = (() => {
 
     const scratchBlueprint = (pointerType, c, ctx) => {
         c.addEventListener(pointerType, function(event){
-            if(bpname != ""){
+            if (bpname !== "") {
                 const rect = c.getBoundingClientRect();
-                var posX = event.pageX - Math.floor(rect.left);
-                var posY = event.pageY - Math.floor(rect.top);
-                points.push({"x": posX, "y": posY});
-                ctx.lineTo(posX, posY);
-                ctx.moveTo(posX, posY);
-                ctx.stroke();
+                const posX = event.clientX - rect.left;
+                const posY = event.clientY - rect.top;
+                if (posX >= 0 && posX <= c.width && posY >= 0 && posY <= c.height) {
+                    points.push({"x": posX, "y": posY});
+                    ctx.lineTo(posX, posY);
+                    ctx.moveTo(posX, posY);
+                    ctx.stroke();
+                }
             }
         });
     };
